@@ -1,0 +1,16 @@
+server:
+  port: 2000
+spring:
+  application:
+    name: catalog-service
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=db_catalog;encrypt=true;trustServerCertificate=true
+    username: hieu
+    password: 123456
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

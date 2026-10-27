@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>com.hieu</groupId>
+        <artifactId>NetComic</artifactId>
         <version>4.1.2</version>
-        <relativePath/>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
 
