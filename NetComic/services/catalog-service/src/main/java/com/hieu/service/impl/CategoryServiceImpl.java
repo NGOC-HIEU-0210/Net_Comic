@@ -84,6 +84,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<CategoryResponse> getCategoryByActiveTrue(Pageable pageable) {
         return categoryRepository.findByActiveTrue(pageable).map(CategoryMapper::toResponse);
     }

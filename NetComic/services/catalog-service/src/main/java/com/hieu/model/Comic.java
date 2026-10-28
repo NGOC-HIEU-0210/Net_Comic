@@ -32,7 +32,7 @@ public class Comic {
     private Long id;
 
 
-    @Column(name = "title", nullable = false,columnDefinition = "NVARCHAR(255)")
+    @Column(name = "title", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String title;
 
     @Nationalized

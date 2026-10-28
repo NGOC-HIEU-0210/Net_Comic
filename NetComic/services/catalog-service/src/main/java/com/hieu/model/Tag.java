@@ -23,6 +23,9 @@ public class Tag {
     @Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(250)")
     private String name;
 
+    @Column(name = "active")
+    private  Boolean active = Boolean.TRUE;
+
     public Tag() {
     }
 
@@ -52,5 +55,13 @@ public class Tag {
     @Override
     public int hashCode() {
         return Tag.class.hashCode();
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
