@@ -1,12 +1,23 @@
 package com.hieu.payload.response.catalog;
 
-public class TagResponse {
+public class AuthorResponse {
+
     private Long id;
     private String name;
     private Boolean active;
+    private String bio;
 
-    public TagResponse() {
+    public AuthorResponse() {
     }
+
+    public AuthorResponse(Long id, String name, Boolean active, String bio) {
+        this.id = id;
+        this.name = name;
+        this.active = active;
+        this.bio = bio;
+    }
+
+
 
     public Long getId() {
         return id;
@@ -30,5 +41,13 @@ public class TagResponse {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }

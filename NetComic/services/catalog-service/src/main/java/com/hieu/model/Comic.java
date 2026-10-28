@@ -60,11 +60,7 @@ public class Comic {
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "tbl_comic_tags",
-            joinColumns = @JoinColumn(name = "comic_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<>();
+
 
     // ---- 1-n ----
 
@@ -131,13 +127,9 @@ public class Comic {
         this.authors = authors;
     }
 
-    public Set<Tag> getTags() {
-        return tags;
-    }
 
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
+
+
 
     public List<Chapter> getChapters() {
         return chapters;

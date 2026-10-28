@@ -12,7 +12,8 @@ public class CategoryMapper {
         }
         Category category = new Category();
         category.setName(request.getName());
-        category.setActive(request.getActive());
+        category.setActive(request.getActive() != null ? request.getActive() : Boolean.TRUE);
+        category.setDescription(request.getDescription());
         return category;
     }
 
@@ -25,6 +26,7 @@ public class CategoryMapper {
         response.setId(category.getId());
         response.setName(category.getName());
         response.setActive(category.getActive());
+        response.setDescrition(category.getDescription());
         return response;
     }
 
@@ -35,6 +37,7 @@ public class CategoryMapper {
         }
         category.setName(request.getName());
         category.setActive(request.getActive());
+        category.setDescription(request.getDescription());
         return category;
     }
 }

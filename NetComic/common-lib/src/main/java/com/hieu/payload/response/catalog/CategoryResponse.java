@@ -7,7 +7,17 @@ public class CategoryResponse {
     private String name;
 
     private Boolean active;
+
+    private String descrition;
     public CategoryResponse() {
+    }
+
+    public String getDescrition() {
+        return descrition;
+    }
+
+    public void setDescrition(String descrition) {
+        this.descrition = descrition;
     }
 
     public CategoryResponse(Long id, String name) {

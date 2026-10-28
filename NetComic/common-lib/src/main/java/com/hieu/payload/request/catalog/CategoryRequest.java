@@ -10,8 +10,12 @@ public class CategoryRequest {
     @Size(max = 85, message = "Tên không được dài quá 85 ký tự")
     private String name;
 
+    private String description;
 
     private Boolean active = Boolean.TRUE;
+
+
+
 
     public CategoryRequest() {
     }
@@ -30,5 +34,14 @@ public class CategoryRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

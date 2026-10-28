@@ -22,7 +22,29 @@ public class Author {
     @Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(255)")
     private String name;
 
+    @Column(name = "active")
+    private Boolean active = Boolean.TRUE;
+
+    @Column(name = "bio", nullable = false, columnDefinition = "NVARCHAR(500)")
+    private String bio;
+
     public Author() {
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public Long getId() {

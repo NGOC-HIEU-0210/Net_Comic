@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
@@ -85,7 +87,22 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CategoryResponse> getCategoryByActiveTrue(Pageable pageable) {
-        return categoryRepository.findByActiveTrue(pageable).map(CategoryMapper::toResponse);
+    public List<CategoryResponse> searchCategoriesByActiveTrue(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getCategoryByActiveTrue();
+        }
+        return categoryRepository.findByNameContainingIgnoreCaseAndActiveTrue(keyword.trim())
+                .stream()
+                .map(CategoryMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getCategoryByActiveTrue() {
+        return categoryRepository.findByActiveTrue()
+                .stream()
+                .map(CategoryMapper::toResponse)
+                .toList();
     }
 }

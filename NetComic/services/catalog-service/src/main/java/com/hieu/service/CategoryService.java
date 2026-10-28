@@ -22,5 +22,8 @@ public interface CategoryService {
 
     Page<CategoryResponse> searchCategories(String keyword,Pageable pageable);
 
-    Page<CategoryResponse> getCategoryByActiveTrue(Pageable pageable);
+    List<CategoryResponse> searchCategoriesByActiveTrue(String keyword);
+
+
+    List<CategoryResponse> getCategoryByActiveTrue();
 }

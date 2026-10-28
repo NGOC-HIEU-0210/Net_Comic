@@ -28,6 +28,9 @@ public class Category {
     @Column(name = "active")
     private Boolean active = Boolean.TRUE;
 
+    @Column(name = "description", columnDefinition = "NVARCHAR(500)")
+    private String description;
+
     public Category() {
     }
 
@@ -55,6 +58,13 @@ public class Category {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public boolean equals(Object o) {
