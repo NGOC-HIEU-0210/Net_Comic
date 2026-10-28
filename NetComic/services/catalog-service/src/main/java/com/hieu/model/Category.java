@@ -1,24 +1,42 @@
 package com.hieu.model;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "tbl_categories")
+@Table(name = "tbl_categories",
+        uniqueConstraints = @UniqueConstraint(name = "uk_category_name", columnNames = "name"))
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 255)
+
+
+    @Column(name = "name", nullable = false, columnDefinition = "NVARCHAR(70)")
     private String name;
 
+    @Column(name = "active")
+    private Boolean active = Boolean.TRUE;
+
     public Category() {
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Long getId() {
@@ -35,5 +53,18 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category other)) return false;
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Category.class.hashCode();
     }
 }

@@ -1,7 +1,11 @@
 package com.hieu.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.hibernate.annotations.Nationalized;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +14,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 import com.hieu.enums.ComicStatus;
@@ -19,73 +27,123 @@ import com.hieu.enums.ComicStatus;
 @Table(name = "tbl_comics")
 public class Comic {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(length = 255)
-	private String title;
 
-	@Column(columnDefinition = "TEXT")
-	private String description;
+    @Column(name = "title", nullable = false,columnDefinition = "NVARCHAR(255)")
+    private String title;
 
-	@Column(length = 512)
-	private String coverUrl;
+    @Nationalized
+    @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
+    private String description;
 
-	@Enumerated(EnumType.STRING)
-	private ComicStatus status;
+    @Column(name = "cover_url", length = 512)
+    private String coverUrl;
 
-	@OneToMany(mappedBy = "comic")
-	private List<Chapter> chapters = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private ComicStatus status = ComicStatus.DRAFT;
 
-	public Comic() {
-	}
+    // ---- n-n: Comic là bên sở hữu, không cascade REMOVE (dùng chung giữa nhiều truyện) ----
 
-	public Long getId() {
-		return id;
-	}
+    @ManyToMany
+    @JoinTable(name = "tbl_comic_categories",
+            joinColumns = @JoinColumn(name = "comic_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @ManyToMany
+    @JoinTable(name = "tbl_comic_authors",
+            joinColumns = @JoinColumn(name = "comic_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private Set<Author> authors = new HashSet<>();
 
-	public String getTitle() {
-		return title;
-	}
+    @ManyToMany
+    @JoinTable(name = "tbl_comic_tags",
+            joinColumns = @JoinColumn(name = "comic_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    // ---- 1-n ----
 
-	public String getDescription() {
-		return description;
-	}
+    @OneToMany(mappedBy = "comic")
+    @OrderBy("chapterNo ASC")
+    private List<Chapter> chapters = new ArrayList<>();
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public Comic() {
+    }
 
-	public String getCoverUrl() {
-		return coverUrl;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setCoverUrl(String coverUrl) {
-		this.coverUrl = coverUrl;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public ComicStatus getStatus() {
-		return status;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setStatus(ComicStatus status) {
-		this.status = status;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public List<Chapter> getChapters() {
-		return chapters;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setChapters(List<Chapter> chapters) {
-		this.chapters = chapters;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
+
+    public ComicStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ComicStatus status) {
+        this.status = status;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Chapter> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
+    }
 }

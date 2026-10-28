@@ -1,5 +1,6 @@
 package com.hieu.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,14 +18,19 @@ public class ImportJob {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chapter_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
+    @Column(name = "zip_url", nullable = false, length = 512)
     private String zipUrl;
 
+    // PENDING / PROCESSING / DONE / FAILED
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
+    // id Staff bên Identity service: chỉ lưu id, không có FK
+    @Column(name = "created_by", nullable = false)
     private Long createdBy;
 
     public ImportJob() {

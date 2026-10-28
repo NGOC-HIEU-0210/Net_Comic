@@ -1,5 +1,7 @@
 package com.hieu.model;
 
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,17 +24,25 @@ public class ReviewRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chapter_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
+    // id Staff / Admin bên Identity service: chỉ lưu id, không có FK
+    @Column(name = "submitted_by", nullable = false)
     private Long submittedBy;
 
+    // null cho tới khi Admin xử lý
+    @Column(name = "reviewed_by")
     private Long reviewedBy;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
     private ReviewStatus status;
 
+    // Lý do từ chối (Admin ghi khi trả lại)
+    @Nationalized
+    @Column(name = "reason", length = 1000)
     private String reason;
 
     public ReviewRequest() {

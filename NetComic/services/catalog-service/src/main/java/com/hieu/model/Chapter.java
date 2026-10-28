@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.Nationalized;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,105 +18,126 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 import com.hieu.enums.ChapterStatus;
 
 @Entity
-@Table(name = "tbl_chapters")
+@Table(name = "tbl_chapters",
+        uniqueConstraints = @UniqueConstraint(name = "uk_chapter_comic_no",
+                columnNames = {"comic_id", "chapter_no"}))   // 1 truyện không có 2 chương cùng số
 public class Chapter {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "comic_id")
-	private Comic comic;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "comic_id", nullable = false)
+    private Comic comic;
 
-	@Column(name = "chapter_no")
-	private Integer chapterNo;
+    @Column(name = "chapter_no", nullable = false)
+    private Integer chapterNo;
 
-	@Column(name = "title", length = 255)
-	private String title;
 
-	@Column(name = "price_coins")
-	private Integer priceCoins;
+    @Column(name = "title", columnDefinition = "NVARCHAR(255)")
+    private String title;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status")
-	private ChapterStatus status;
+    // 0 = chương miễn phí
+    @Column(name = "price_coins", nullable = false)
+    private Integer priceCoins = 0;
 
-	@Column(name = "publish_at")
-	private LocalDateTime publishAt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private ChapterStatus status;
 
-	@OneToMany(mappedBy = "chapter")
-	private List<ReviewRequest> reviewRequests = new ArrayList<>();
+    // Hẹn giờ phát hành (BR10); null = không hẹn giờ
+    @Column(name = "publish_at")
+    private LocalDateTime publishAt;
 
-	public Chapter() {
-	}
+    // Lịch sử duyệt: giữ lại, không xóa theo chương
+    @OneToMany(mappedBy = "chapter")
+    private List<ReviewRequest> reviewRequests = new ArrayList<>();
 
-	public Long getId() {
-		return id;
-	}
+    // Trang ảnh thuộc hẳn về chương: xóa chương thì xóa trang
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("pageNo ASC")
+    private List<ChapterPage> pages = new ArrayList<>();
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Chapter() {
+    }
 
-	public Comic getComic() {
-		return comic;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setComic(Comic comic) {
-		this.comic = comic;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Integer getChapterNo() {
-		return chapterNo;
-	}
+    public Comic getComic() {
+        return comic;
+    }
 
-	public void setChapterNo(Integer chapterNo) {
-		this.chapterNo = chapterNo;
-	}
+    public void setComic(Comic comic) {
+        this.comic = comic;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public Integer getChapterNo() {
+        return chapterNo;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setChapterNo(Integer chapterNo) {
+        this.chapterNo = chapterNo;
+    }
 
-	public Integer getPriceCoins() {
-		return priceCoins;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setPriceCoins(Integer priceCoins) {
-		this.priceCoins = priceCoins;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public ChapterStatus getStatus() {
-		return status;
-	}
+    public Integer getPriceCoins() {
+        return priceCoins;
+    }
 
-	public void setStatus(ChapterStatus status) {
-		this.status = status;
-	}
+    public void setPriceCoins(Integer priceCoins) {
+        this.priceCoins = priceCoins;
+    }
 
-	public LocalDateTime getPublishAt() {
-		return publishAt;
-	}
+    public ChapterStatus getStatus() {
+        return status;
+    }
 
-	public void setPublishAt(LocalDateTime publishAt) {
-		this.publishAt = publishAt;
-	}
+    public void setStatus(ChapterStatus status) {
+        this.status = status;
+    }
 
-	public List<ReviewRequest> getReviewRequests() {
-		return reviewRequests;
-	}
+    public LocalDateTime getPublishAt() {
+        return publishAt;
+    }
 
-	public void setReviewRequests(List<ReviewRequest> reviewRequests) {
-		this.reviewRequests = reviewRequests;
-	}
+    public void setPublishAt(LocalDateTime publishAt) {
+        this.publishAt = publishAt;
+    }
+
+    public List<ReviewRequest> getReviewRequests() {
+        return reviewRequests;
+    }
+
+    public void setReviewRequests(List<ReviewRequest> reviewRequests) {
+        this.reviewRequests = reviewRequests;
+    }
+
+    public List<ChapterPage> getPages() {
+        return pages;
+    }
+
+    public void setPages(List<ChapterPage> pages) {
+        this.pages = pages;
+    }
 }

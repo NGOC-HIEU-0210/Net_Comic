@@ -1,39 +1,52 @@
 package com.hieu.model;
 
 import com.hieu.embeddable.ComicAssignmentId;
-
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "tbl_comic_assignments")
-@IdClass(ComicAssignmentId.class)
 public class ComicAssignment {
 
-	@Id
-	private Long comicId;
+    @EmbeddedId
+    private ComicAssignmentId id = new ComicAssignmentId();
 
-	@Id
-	private Long staffId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId("comicId")
+    @JoinColumn(name = "comic_id")
+    private Comic comic;
 
-	public ComicAssignment() {
-	}
+    public ComicAssignment() {
+    }
 
-	public Long getComicId() {
-		return comicId;
-	}
+    public ComicAssignment(Comic comic, Long staffId) {
+        this.comic = comic;
+        this.id = new ComicAssignmentId(comic.getId(), staffId);
+    }
 
-	public void setComicId(Long comicId) {
-		this.comicId = comicId;
-	}
+    public ComicAssignmentId getId() {
+        return id;
+    }
 
-	public Long getStaffId() {
-		return staffId;
-	}
+    public Comic getComic() {
+        return comic;
+    }
 
-	public void setStaffId(Long staffId) {
-		this.staffId = staffId;
-	}
+    public void setComic(Comic comic) {
+        this.comic = comic;
+    }
+
+    public Long getStaffId() {
+        return id.getStaffId();
+    }
+
+    public void setStaffId(Long staffId) {
+        this.id.setStaffId(staffId);
+    }
 }

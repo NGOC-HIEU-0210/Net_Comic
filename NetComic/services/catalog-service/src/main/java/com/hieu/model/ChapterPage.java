@@ -1,5 +1,6 @@
 package com.hieu.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -8,25 +9,31 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "tbl_chapter_pages")
+@Table(name = "tbl_chapter_pages",
+        uniqueConstraints = @UniqueConstraint(name = "uk_page_chapter_no",
+                columnNames = { "chapter_id", "page_no" }))
 public class ChapterPage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chapter_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
+    // null nếu upload tay, có giá trị nếu sinh ra từ import zip
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "import_job_id")
     private ImportJob importJob;
 
+    @Column(name = "page_no", nullable = false)
     private Integer pageNo;
 
+    @Column(name = "image_url", nullable = false, length = 512)
     private String imageUrl;
 
     public ChapterPage() {
