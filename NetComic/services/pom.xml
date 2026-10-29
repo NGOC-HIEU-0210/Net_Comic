@@ -17,6 +17,7 @@
 
     <modules>
         <module>catalog-service</module>
+        <module>media-service</module>
     </modules>
     <properties>
         <java.version>21</java.version>

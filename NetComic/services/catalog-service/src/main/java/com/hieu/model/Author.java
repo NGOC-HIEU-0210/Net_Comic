@@ -1,13 +1,10 @@
 package com.hieu.model;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_authors")
@@ -28,8 +25,12 @@ public class Author {
     @Column(name = "bio", nullable = false, columnDefinition = "NVARCHAR(500)")
     private String bio;
 
+
+
     public Author() {
     }
+
+
 
     public Boolean getActive() {
         return active;

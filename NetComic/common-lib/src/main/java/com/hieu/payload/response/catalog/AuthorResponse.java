@@ -1,5 +1,8 @@
 package com.hieu.payload.response.catalog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AuthorResponse {
 
     private Long id;
@@ -7,8 +10,11 @@ public class AuthorResponse {
     private Boolean active;
     private String bio;
 
+
     public AuthorResponse() {
     }
+
+
 
     public AuthorResponse(Long id, String name, Boolean active, String bio) {
         this.id = id;

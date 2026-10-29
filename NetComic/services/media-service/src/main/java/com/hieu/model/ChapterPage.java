@@ -1,16 +1,5 @@
 package com.hieu.model;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-
+import jakarta.persistence.*;
 @Entity
 @Table(name = "tbl_chapter_pages",
         uniqueConstraints = @UniqueConstraint(name = "uk_page_chapter_no",
@@ -21,11 +10,9 @@ public class ChapterPage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "chapter_id", nullable = false)
-    private Chapter chapter;
+    @Column(name = "chapter_id", nullable = false)    // tham chiếu Catalog, không có FK
+    private Long chapterId;
 
-    // null nếu upload tay, có giá trị nếu sinh ra từ import zip
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "import_job_id")
     private ImportJob importJob;
@@ -33,8 +20,8 @@ public class ChapterPage {
     @Column(name = "page_no", nullable = false)
     private Integer pageNo;
 
-    @Column(name = "image_url", nullable = false, length = 512)
-    private String imageUrl;
+    @Column(name = "image_key", nullable = false, length = 512)
+    private String imageKey;
 
     public ChapterPage() {
     }
@@ -47,12 +34,12 @@ public class ChapterPage {
         this.id = id;
     }
 
-    public Chapter getChapter() {
-        return chapter;
+    public Long getChapterId() {
+        return chapterId;
     }
 
-    public void setChapter(Chapter chapter) {
-        this.chapter = chapter;
+    public void setChapterId(Long chapterId) {
+        this.chapterId = chapterId;
     }
 
     public ImportJob getImportJob() {
@@ -71,11 +58,11 @@ public class ChapterPage {
         this.pageNo = pageNo;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImageKey() {
+        return imageKey;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageKey(String imageKey) {
+        this.imageKey = imageKey;
     }
 }

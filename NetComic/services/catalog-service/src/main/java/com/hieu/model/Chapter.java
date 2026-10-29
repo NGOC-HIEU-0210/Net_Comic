@@ -51,7 +51,7 @@ public class Chapter {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private ChapterStatus status;
+    private ChapterStatus status = ChapterStatus.DRAFT;
 
     // Hẹn giờ phát hành (BR10); null = không hẹn giờ
     @Column(name = "publish_at")
@@ -61,10 +61,7 @@ public class Chapter {
     @OneToMany(mappedBy = "chapter")
     private List<ReviewRequest> reviewRequests = new ArrayList<>();
 
-    // Trang ảnh thuộc hẳn về chương: xóa chương thì xóa trang
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("pageNo ASC")
-    private List<ChapterPage> pages = new ArrayList<>();
+
 
     public Chapter() {
     }
@@ -133,11 +130,5 @@ public class Chapter {
         this.reviewRequests = reviewRequests;
     }
 
-    public List<ChapterPage> getPages() {
-        return pages;
-    }
 
-    public void setPages(List<ChapterPage> pages) {
-        this.pages = pages;
-    }
 }

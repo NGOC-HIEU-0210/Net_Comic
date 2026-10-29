@@ -1,14 +1,7 @@
 package com.hieu.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.hieu.enums.ImportStatus;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tbl_import_jobs")
@@ -18,19 +11,17 @@ public class ImportJob {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "chapter_id", nullable = false)
-    private Chapter chapter;
+    @Column(name = "chapter_id", nullable = false)   // tham chiếu Catalog
+    private Long chapterId;
 
     @Column(name = "zip_url", nullable = false, length = 512)
     private String zipUrl;
 
-    // PENDING / PROCESSING / DONE / FAILED
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private String status;
+    private ImportStatus status = ImportStatus.PENDING;
 
-    // id Staff bên Identity service: chỉ lưu id, không có FK
-    @Column(name = "created_by", nullable = false)
+    @Column(name = "created_by", nullable = false)    // tham chiếu Identity
     private Long createdBy;
 
     public ImportJob() {
@@ -44,12 +35,12 @@ public class ImportJob {
         this.id = id;
     }
 
-    public Chapter getChapter() {
-        return chapter;
+    public Long getChapterId() {
+        return chapterId;
     }
 
-    public void setChapter(Chapter chapter) {
-        this.chapter = chapter;
+    public void setChapterId(Long chapterId) {
+        this.chapterId = chapterId;
     }
 
     public String getZipUrl() {
@@ -60,11 +51,11 @@ public class ImportJob {
         this.zipUrl = zipUrl;
     }
 
-    public String getStatus() {
+    public ImportStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ImportStatus status) {
         this.status = status;
     }
 
