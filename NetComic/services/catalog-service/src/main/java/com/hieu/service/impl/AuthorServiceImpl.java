@@ -25,9 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AuthorResponse createAuthor(AuthorRequest request) throws Exception {
-        if (authorRepository.existsByNameIgnoreCase(request.getName())) {
-            throw new Exception("Tên tác giả đã tồn tại");
-        }
+
         Author author = AuthorMapper.toEntity(request);
         Author saved = authorRepository.save(author);
         return AuthorMapper.toResponse(saved);
@@ -40,9 +38,7 @@ public class AuthorServiceImpl implements AuthorService {
                 () -> new Exception("Không tìm thấy tác giả với id = " + id)
         );
 
-        if (authorRepository.existsByNameIgnoreCaseAndIdNot(request.getName(), id)) {
-            throw new Exception("Tên tác giả đã tồn tại");
-        }
+
 
         AuthorMapper.updateEntity(author, request);
         Author saved = authorRepository.save(author);
