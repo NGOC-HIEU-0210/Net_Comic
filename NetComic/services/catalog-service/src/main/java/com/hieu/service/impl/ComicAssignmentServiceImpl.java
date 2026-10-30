@@ -38,7 +38,7 @@ public class ComicAssignmentServiceImpl implements ComicAssignmentService {
             throw new Exception("Nhân viên đã được phân công cho truyện này");
         }
 
-        ComicAssignment saved = assignmentRepository.save(new ComicAssignment(comic, request.getStaffId()));
+        ComicAssignment saved = assignmentRepository.save(ComicAssignmentMapper.toEntity(request, comic));
         return ComicAssignmentMapper.toResponse(saved);
     }
 

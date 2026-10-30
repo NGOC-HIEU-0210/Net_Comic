@@ -5,6 +5,8 @@ import com.hieu.payload.request.catalog.ReassignStaffRequest;
 import com.hieu.payload.response.ApiResponse;
 import com.hieu.payload.response.catalog.ComicAssignmentResponse;
 import com.hieu.service.ComicAssignmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Tag(name = "ComicAssignments", description = "Quản lý phân công (comic assignment) giữa truyện và nhân viên")
 @RestController
 @RequestMapping("/api/version-1/comic-assignments")
 public class ComicAssignmentController {
@@ -31,12 +34,14 @@ public class ComicAssignmentController {
             Map.of("comicId", "id.comicId", "staffId", "id.staffId");
     private static final int MAX_PAGE_SIZE = 100;
 
+    @Operation(summary = "Phân công nhân viên cho truyện", description = "Tạo phân công mới: nhân viên được gán cho truyện.")
     @PostMapping
     public ResponseEntity<ComicAssignmentResponse> createComicAssignment(
             @Valid @RequestBody ComicAssignmentRequest request) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(assignmentService.createComicAssignment(request));
     }
 
+    @Operation(summary = "Sửa phân công", description = "Sửa phân công: xóa dòng cũ (comicId + staffId) rồi thêm dòng mới (comicId + newStaffId).")
     @PutMapping("/{comicId}/{staffId}")
     public ResponseEntity<ComicAssignmentResponse> updateComicAssignment(
             @PathVariable Long comicId,
@@ -45,6 +50,7 @@ public class ComicAssignmentController {
         return ResponseEntity.ok(assignmentService.updateComicAssignment(comicId, staffId, request));
     }
 
+    @Operation(summary = "Xóa phân công", description = "Xóa phân công của một truyện.")
     @DeleteMapping("/{comicId}/{staffId}")
     public ResponseEntity<ApiResponse> deleteComicAssignment(
             @PathVariable Long comicId,
@@ -53,6 +59,7 @@ public class ComicAssignmentController {
         return ResponseEntity.ok(new ApiResponse("Xóa thành công"));
     }
 
+    @Operation(summary = "Lấy phân công theo truyện và nhân viên", description = "Lấy chi tiết phân công.")
     @GetMapping("/{comicId}/{staffId}")
     public ResponseEntity<ComicAssignmentResponse> getComicAssignment(
             @PathVariable Long comicId,
@@ -60,6 +67,7 @@ public class ComicAssignmentController {
         return ResponseEntity.ok(assignmentService.getComicAssignment(comicId, staffId));
     }
 
+    @Operation(summary = "Lấy danh sách phân công", description = "Lấy danh sách phân công có phân trang.")
     @GetMapping
     public ResponseEntity<Page<ComicAssignmentResponse>> getAllComicAssignments(
             @RequestParam(defaultValue = "0") int page,
@@ -70,6 +78,7 @@ public class ComicAssignmentController {
                 buildPageable(page, size, sortBy, sortDirection, "comicId")));
     }
 
+    @Operation(summary = "Lấy phân công theo truyện", description = "Lấy danh sách phân công của một truyện.")
     @GetMapping("/by-comic/{comicId}")
     public ResponseEntity<Page<ComicAssignmentResponse>> getAssignmentsByComic(
             @PathVariable Long comicId,
@@ -81,6 +90,7 @@ public class ComicAssignmentController {
                 comicId, buildPageable(page, size, sortBy, sortDirection, "staffId")));
     }
 
+    @Operation(summary = "Lấy phân công theo nhân viên", description = "Lấy danh sách phân công của một nhân viên.")
     @GetMapping("/by-staff/{staffId}")
     public ResponseEntity<Page<ComicAssignmentResponse>> getAssignmentsByStaff(
             @PathVariable Long staffId,
