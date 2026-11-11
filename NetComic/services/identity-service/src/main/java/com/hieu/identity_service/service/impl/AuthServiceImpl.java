@@ -42,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserProfileRepository userProfileRepository;
     private final OAuthIdentityRepository oauthIdentityRepository;
     private final PasswordEncoder passwordEncoder;
+    /
 
     public AuthServiceImpl(TokenService tokenService,
                            GoogleTokenVerifier googleTokenVerifier,

@@ -5,6 +5,7 @@ import com.hieu.identity_service.model.Account;
 
 // Quản lý JWT, RefreshToken và PasswordResetToken. Token gốc chỉ trả ra một lần, DB chỉ lưu bản băm.
 public interface TokenService {
+    //
 
     String generateAccessToken(Account account);   // JWT chứa sub, role và danh sách permission
 
